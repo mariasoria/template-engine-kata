@@ -1,5 +1,22 @@
-# Kotlin Katas
+# Template Engine Kata
 
-## Description
+## The Problem
 
-Template to practice TDD using Kotlin, AssertJ and Mockito-Kotlin
+We want to recreate a templating system which replaces a marked text using a 
+predefined dictionary. We will give two different inputs to this component: 
+the template text, and dictionary. Expecting that the output will be the replaced 
+text.
+
+Input:
+```
+- This is a template with one ${variable}
+- {variable: "foo"}
+```
+
+Output:
+```
+- This template with one foo
+```
+
+Note: Pay special attention to the edge cases like lack of variables or values and the use of complex data structures
+instead of strings.
