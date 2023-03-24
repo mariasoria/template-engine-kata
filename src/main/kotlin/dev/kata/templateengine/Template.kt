@@ -3,9 +3,14 @@ package dev.kata.templateengine
 class Template(private var templateText: String, private var templateVariables: Map<String, String>) {
 
     fun replacementCanNotBeDone(): Boolean {
-        val variableName = templateVariables.keys.first()
-        val expression = "\${$variableName}"
-        return !templateText.contains(expression) && variableName == ""
+        var expression: String
+        val variableNames = templateVariables.keys
+        variableNames.forEach {
+            expression = "\${$it}"
+            if(!templateText.contains(expression) && it == "")
+                return true
+        }
+        return false
     }
 
     fun doReplacement(): Template {
