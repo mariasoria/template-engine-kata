@@ -2,9 +2,9 @@
 
 ## The Problem
 
-We want to recreate a templating system which replaces a marked text using a 
+We want to recreate a templating library which replaces certain marked text using a 
 predefined dictionary. We will give two different inputs to this component: 
-the template text, and dictionary. Expecting that the output will be the replaced 
+the template text and the dictionary. Expecting that the output will be the replaced 
 text.
 
 Input:
