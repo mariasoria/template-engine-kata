@@ -5,16 +5,20 @@ class Template(private var templateText: String, private var templateVariables: 
     fun replacementCanNotBeDone(): Boolean {
         val variableName = templateVariables.keys.first()
         val expression = "\${$variableName}"
-        return !templateText.contains(expression) &&
-                variableName == ""
+        return !templateText.contains(expression) && variableName == ""
     }
 
     fun doReplacement(): Template {
-        val variableName = templateVariables.keys.first()
-        val variableValue = templateVariables[variableName].toString()
-        val expression = "\${$variableName}"
-
-        return Template(templateText.replace(expression, variableValue), templateVariables)
+        val variableNames = templateVariables.keys
+        var text = templateText
+        var expression: String
+        var variableValue: String
+        variableNames.forEach {
+            expression = "\${$it}"
+            variableValue = templateVariables[it].toString()
+            text = text.replace(expression, variableValue)
+        }
+        return Template(text, templateVariables)
     }
 
     fun get(): String {
