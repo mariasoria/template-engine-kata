@@ -75,6 +75,27 @@ internal class TemplateEngineShould {
         val expectedResult = "This is a text with a variable to be replaced. " +
                 "And this is another text with the same \${other-variable} to be replaced. " +
                 "And this is another text with the same \${another-variable} to be replaced."
+
+        assertEquals(
+            Either.Success(ParsedText(expectedResult)),
+            TemplateEngine.replace(text, replacement)
+        )
+    }
+
+    @Test
+    fun `TemplateEngine should replace all the specified expressions that are present in the text`() {
+        val text = "This is a text with a \${variable} to be replaced. " +
+                "And this is another text with \${other-variable} to be replaced. " +
+                "And this is another text with \${another-variable} to be replaced."
+        val replacement = mapOf(
+            "variable" to "variable",
+            "other-variable" to "other-variable",
+            "another-variable" to "another-variable"
+        )
+        val expectedResult = "This is a text with a variable to be replaced. " +
+                "And this is another text with other-variable to be replaced. " +
+                "And this is another text with another-variable to be replaced."
+
         assertEquals(
             Either.Success(ParsedText(expectedResult)),
             TemplateEngine.replace(text, replacement)
