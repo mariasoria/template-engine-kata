@@ -31,12 +31,25 @@ internal class TemplateEngineShould {
     fun `TemplateEngine should not replace anything if the variable is empty and give a message error as feedback`() {
         val text = "This is a text with a \${variable} to be replaced"
         val replacementWithEmptyVariable = mapOf("" to "value")
-        val expectedResult = "Some problems were encountered while the replacement. " +
+        val expectedFeedbackError = "Some problems were encountered while the replacement. " +
+                "Variable name might be empty or replacement location might be missing."
+
+        assertEquals(
+            Either.Error(Feedback(expectedFeedbackError)),
+            TemplateEngine.replace(text, replacementWithEmptyVariable)
+        )
+    }
+
+    @Test
+    fun `TemplateEngine should not replace anything if the replacement data is empty and give a message error as feedback`() {
+        val text = "This is a text with a \${variable} to be replaced"
+        val emptyReplacement = emptyMap<String, String>()
+        val expectedFeedbackError = "Some problems were encountered. " +
                 "Please check if the inputs you provided are correct"
 
         assertEquals(
-            Either.Error(Feedback(expectedResult)),
-            TemplateEngine.replace(text, replacementWithEmptyVariable)
+            Either.Error(Feedback(expectedFeedbackError)),
+            TemplateEngine.replace(text, emptyReplacement)
         )
     }
 
@@ -63,7 +76,9 @@ internal class TemplateEngineShould {
         val expectedResult = "This is a text with a variable to be replaced. " +
                 "And this is another text with the same \${other-variable} to be replaced. " +
                 "And this is another text with the same \${another-variable} to be replaced."
-        assertEquals(Either.Success(ParsedText(expectedResult)),
-            TemplateEngine.replace(text, replacement))
+        assertEquals(
+            Either.Success(ParsedText(expectedResult)),
+            TemplateEngine.replace(text, replacement)
+        )
     }
 }

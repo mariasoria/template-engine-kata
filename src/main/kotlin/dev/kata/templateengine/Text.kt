@@ -14,7 +14,12 @@ class Text {
         this.expression = "\${$variableName}"
     }
 
-    fun containsVariable(): Boolean {
+    fun replacementCanNotBeDone(): Boolean {
+        return !this.text.contains(this.expression) &&
+                this.variableName == ""
+    }
+
+    fun replacementCanBeDone(): Boolean {
         return this.text.contains(expression)
     }
 
@@ -26,7 +31,4 @@ class Text {
         return this.text
     }
 
-    fun providedInputIsIncorrect(): Boolean {
-        return !this.text.contains(this.expression) && this.variableName == ""
-    }
 }
