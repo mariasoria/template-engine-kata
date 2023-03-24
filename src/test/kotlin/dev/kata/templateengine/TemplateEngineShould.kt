@@ -16,10 +16,10 @@ internal class TemplateEngineShould {
     }
 
     @Test
-    fun `TemplateEngine should remove the variable from the expression if the variable is not present in the text`() {
+    fun `TemplateEngine should do nothing if the variable is not present in the text`() {
         val textWithANonExistingVariable = "This is a text with a \${differentVariable} to be replaced"
         val replacement = mapOf("non-existing-variable" to "irrelevant")
-        val expectedResult = "This is a text with a  to be replaced"
+        val expectedResult = "This is a text with a \${differentVariable} to be replaced"
 
         assertEquals(
             Either.Success(ParsedText(expectedResult)),
@@ -31,7 +31,8 @@ internal class TemplateEngineShould {
     fun `TemplateEngine should not replace anything if the variable is empty and give a message error as feedback`() {
         val text = "This is a text with a \${variable} to be replaced"
         val replacementWithEmptyVariable = mapOf("" to "value")
-        val expectedResult = "Some problems were encountered while the replacement"
+        val expectedResult = "Some problems were encountered while the replacement. " +
+                "Please check if the inputs you provided are correct"
 
         assertEquals(
             Either.Error(Feedback(expectedResult)),
