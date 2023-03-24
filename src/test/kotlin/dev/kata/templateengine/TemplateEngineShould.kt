@@ -41,6 +41,25 @@ internal class TemplateEngineShould {
     }
 
     @Test
+    fun `TemplateEngine should not replace anything and give a message error if there is any variable empty`() {
+        val text = "This is a text with a \${variable} to be replaced. " +
+                "And this is another text with \${other-variable} to be replaced. " +
+                "And this is another text with \${another-variable} to be replaced."
+        val replacement = mapOf(
+            "variable" to "variable",
+            "" to "other-variable",
+            "another-variable" to "another-variable"
+        )
+        val expectedResult = "Some problems were encountered while the replacement. " +
+                                "Variable name might be empty or replacement location might be missing."
+
+        assertEquals(
+            Either.Error(Feedback(expectedResult)),
+            TemplateEngine.replace(text, replacement)
+        )
+    }
+
+    @Test
     fun `TemplateEngine should not replace anything if the replacement data is empty and give a message error as feedback`() {
         val text = "This is a text with a \${variable} to be replaced"
         val emptyReplacement = emptyMap<String, String>()
@@ -49,20 +68,6 @@ internal class TemplateEngineShould {
         assertEquals(
             Either.Error(Feedback(expectedFeedbackError)),
             TemplateEngine.replace(text, emptyReplacement)
-        )
-    }
-
-    @Test
-    fun `TemplateEngine should replace all expressions with the variable present in the text`() {
-        val text = "This is a text with a \${variable} to be replaced. " +
-                "And this is another text with the same \${variable} to be replaced. "
-        val replacement = mapOf("variable" to "variable")
-        val expectedResult = "This is a text with a variable to be replaced. " +
-                "And this is another text with the same variable to be replaced. "
-
-        assertEquals(
-            Either.Success(ParsedText(expectedResult)),
-            TemplateEngine.replace(text, replacement)
         )
     }
 
