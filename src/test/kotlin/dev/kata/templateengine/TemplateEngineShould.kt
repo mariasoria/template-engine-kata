@@ -44,8 +44,7 @@ internal class TemplateEngineShould {
     fun `TemplateEngine should not replace anything if the replacement data is empty and give a message error as feedback`() {
         val text = "This is a text with a \${variable} to be replaced"
         val emptyReplacement = emptyMap<String, String>()
-        val expectedFeedbackError = "Some problems were encountered. " +
-                "Please check if the inputs you provided are correct"
+        val expectedFeedbackError = "Provided text or variables are empty"
 
         assertEquals(
             Either.Error(Feedback(expectedFeedbackError)),

@@ -3,23 +3,20 @@ package dev.kata.templateengine
 class TemplateEngine {
     companion object {
         fun replace(text: String, replacement: Map<String, String>): Either<ParsedText, Feedback> {
-            if (providedInputIsNotValid(text, replacement)) {
+            if (isEmpty(text, replacement)) {
                 return Either.Error(Feedback(
-                    "Some problems were encountered. " +
-                                "Please check if the inputs you provided are correct"))
+                    "Provided text or variables are empty"))
             }
-            val text = Text(text, replacement)
-            if (text.replacementCanNotBeDone()) {
+            val template = Template(text, replacement)
+            if (template.replacementCanNotBeDone()) {
                 return Either.Error(Feedback(
                     "Some problems were encountered while the replacement. " +
                                 "Variable name might be empty or replacement location might be missing."))
+            } else {
+                return Either.Success(ParsedText(template.doReplacement().get()))
             }
-            if (text.replacementCanBeDone()) {
-                text.doReplacement()
-            }
-            return Either.Success(ParsedText(text.get()))
         }
-        private fun providedInputIsNotValid(text: String, replacement: Map<String, String>): Boolean {
+        private fun isEmpty(text: String, replacement: Map<String, String>): Boolean {
             return replacement.isEmpty() || text.isEmpty()
         }
     }
