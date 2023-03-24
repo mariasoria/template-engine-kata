@@ -52,4 +52,17 @@ internal class TemplateEngineShould {
             TemplateEngine.replace(text, replacement)
         )
     }
+
+    @Test
+    fun `TemplateEngine should replace only the expressions with the specified variable present in the text`() {
+        val text = "This is a text with a \${variable} to be replaced. " +
+                "And this is another text with the same \${other-variable} to be replaced. " +
+                "And this is another text with the same \${another-variable} to be replaced."
+        val replacement = mapOf("variable" to "variable")
+        val expectedResult = "This is a text with a variable to be replaced. " +
+                "And this is another text with the same \${other-variable} to be replaced. " +
+                "And this is another text with the same \${another-variable} to be replaced."
+        assertEquals(Either.Success(ParsedText(expectedResult)),
+            TemplateEngine.replace(text, replacement))
+    }
 }
