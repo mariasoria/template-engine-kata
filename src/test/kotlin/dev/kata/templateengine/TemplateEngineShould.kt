@@ -12,10 +12,10 @@ internal class TemplateEngineShould {
     }
 
     @Test
-    fun `TemplateEngine should replace the expression with a blank if the variable is not present in the text`() {
+    fun `TemplateEngine should remove the variable from the expression if the variable is not present in the text`() {
         val textWithANonExistingVariable = "This is a text with a \${differentVariable} to be replaced"
         val replacement = mapOf("non-existing-variable" to "irrelevant")
-        val expectedResult = "This is a text with a   to be replaced"
+        val expectedResult = "This is a text with a  to be replaced"
         assertEquals(expectedResult, TemplateEngine.replace(textWithANonExistingVariable, replacement))
     }
 
