@@ -8,7 +8,7 @@ class TemplateEngine {
             val regex = Regex(pattern = "\\$\\{[^}]*\\}", options = setOf(RegexOption.IGNORE_CASE))
             if (!text.contains(variableName))
             {
-                return text.replace(regex, " ")
+                return text.replace(regex, "")
             }
             return text.replace(regex, variableValue)
         }
