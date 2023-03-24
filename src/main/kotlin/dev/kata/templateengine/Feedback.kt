@@ -1,11 +1,6 @@
 package dev.kata.templateengine
 
-class Feedback {
-    var errorMessage: String
-
-    constructor(errorMessage: String) {
-        this.errorMessage = errorMessage
-    }
+class Feedback(var errorMessage: String) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

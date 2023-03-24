@@ -1,15 +1,6 @@
 package dev.kata.templateengine
 
-class ParsedText {
-    var text: String
-
-    constructor(text: String) {
-        this.text = text
-    }
-
-    fun setResultantText(textToBeReplaced: String){
-        this.text = textToBeReplaced
-    }
+class ParsedText(var text: String) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,6 +16,4 @@ class ParsedText {
     override fun hashCode(): Int {
         return text.hashCode()
     }
-
-
 }
