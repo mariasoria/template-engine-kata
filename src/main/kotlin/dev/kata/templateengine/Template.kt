@@ -2,15 +2,10 @@ package dev.kata.templateengine
 
 class Template(private var templateText: String, private var templateVariables: Map<String, String>) {
 
-    fun replacementCanNotBeDone(): Boolean {
-        var expression: String
+    fun anyReplacementVariableIsEmpty(): Boolean {
         val variableNames = templateVariables.keys
-        variableNames.forEach {
-            expression = "\${$it}"
-            if(!templateText.contains(expression) && it == "")
-                return true
-        }
-        return false
+        val nonValidVariable = variableNames.filter { name -> name == "" }
+        return nonValidVariable.isNotEmpty()
     }
 
     fun doReplacement(): Template {
@@ -18,9 +13,9 @@ class Template(private var templateText: String, private var templateVariables: 
         var text = templateText
         var expression: String
         var variableValue: String
-        variableNames.forEach {
-            expression = "\${$it}"
-            variableValue = templateVariables[it].toString()
+        variableNames.forEach { name ->
+            expression = "\${$name}"
+            variableValue = templateVariables[name].toString()
             text = text.replace(expression, variableValue)
         }
         return Template(text, templateVariables)
