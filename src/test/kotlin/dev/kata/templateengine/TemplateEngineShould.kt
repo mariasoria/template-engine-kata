@@ -32,7 +32,7 @@ internal class TemplateEngineShould {
         val text = "This is a text with a \${variable} to be replaced"
         val replacementWithEmptyVariable = mapOf("" to "value")
         val expectedFeedbackError = "Some problems were encountered while the replacement. " +
-                "Variable name might be empty."
+                "Variable name is an empty string."
 
         assertEquals(
             Either.Error(Feedback(expectedFeedbackError)),

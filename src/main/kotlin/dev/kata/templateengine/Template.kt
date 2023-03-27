@@ -2,13 +2,11 @@ package dev.kata.templateengine
 
 class Template(private var templateText: String, private var templateVariables: Map<String, String>) {
 
-    fun anyReplacementVariableIsEmpty(): Boolean {
-        val variableNames = templateVariables.keys
-        val nonValidVariable = variableNames.filter { name -> name == "" }
-        return nonValidVariable.isNotEmpty()
+    fun containsEmptyVariable(): Boolean {
+        return templateVariables.keys.contains("")
     }
 
-    fun doReplacement(): Template {
+    fun replace(): Template {
         val variableNames = templateVariables.keys
         var text = templateText
         var expression: String
@@ -21,7 +19,7 @@ class Template(private var templateText: String, private var templateVariables: 
         return Template(text, templateVariables)
     }
 
-    fun get(): String {
+    fun text(): String {
         return templateText
     }
 
