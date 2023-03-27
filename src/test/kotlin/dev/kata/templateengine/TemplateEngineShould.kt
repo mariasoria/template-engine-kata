@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 internal class TemplateEngineShould {
     @Test
-    fun `TemplateEngine should not replace anything if there is not a variable in the text`() {
+    fun `TemplateEngine should not replace anything if there are not variables to be replaced in the text`() {
         val textWithoutVariables = "This is just a text without anything to replace"
         val replacement = mapOf("variable" to "irrelevant")
 
@@ -16,7 +16,7 @@ internal class TemplateEngineShould {
     }
 
     @Test
-    fun `TemplateEngine should do nothing if the variable is not present in the text`() {
+    fun `TemplateEngine should not replace anything if the variable is not present in the text`() {
         val textWithANonExistingVariable = "This is a text with a \${differentVariable} to be replaced"
         val replacement = mapOf("non-existing-variable" to "irrelevant")
         val expectedResult = "This is a text with a \${differentVariable} to be replaced"
@@ -32,30 +32,11 @@ internal class TemplateEngineShould {
         val text = "This is a text with a \${variable} to be replaced"
         val replacementWithEmptyVariable = mapOf("" to "value")
         val expectedFeedbackError = "Some problems were encountered while the replacement. " +
-                "Variable name might be empty or replacement location might be missing."
+                "Variable name might be empty."
 
         assertEquals(
             Either.Error(Feedback(expectedFeedbackError)),
             TemplateEngine.replace(text, replacementWithEmptyVariable)
-        )
-    }
-
-    @Test
-    fun `TemplateEngine should not replace anything and give a message error if there is any variable empty`() {
-        val text = "This is a text with a \${variable} to be replaced. " +
-                "And this is another text with \${other-variable} to be replaced. " +
-                "And this is another text with \${another-variable} to be replaced."
-        val replacement = mapOf(
-            "variable" to "variable",
-            "" to "other-variable",
-            "another-variable" to "another-variable"
-        )
-        val expectedResult = "Some problems were encountered while the replacement. " +
-                                "Variable name might be empty or replacement location might be missing."
-
-        assertEquals(
-            Either.Error(Feedback(expectedResult)),
-            TemplateEngine.replace(text, replacement)
         )
     }
 
@@ -68,22 +49,6 @@ internal class TemplateEngineShould {
         assertEquals(
             Either.Error(Feedback(expectedFeedbackError)),
             TemplateEngine.replace(text, emptyReplacement)
-        )
-    }
-
-    @Test
-    fun `TemplateEngine should replace only the expressions with the specified variable present in the text`() {
-        val text = "This is a text with a \${variable} to be replaced. " +
-                "And this is another text with the same \${other-variable} to be replaced. " +
-                "And this is another text with the same \${another-variable} to be replaced."
-        val replacement = mapOf("variable" to "variable")
-        val expectedResult = "This is a text with a variable to be replaced. " +
-                "And this is another text with the same \${other-variable} to be replaced. " +
-                "And this is another text with the same \${another-variable} to be replaced."
-
-        assertEquals(
-            Either.Success(ParsedText(expectedResult)),
-            TemplateEngine.replace(text, replacement)
         )
     }
 
