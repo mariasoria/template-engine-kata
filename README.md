@@ -7,6 +7,8 @@ predefined dictionary. We will give two different inputs to this component:
 the template text and the dictionary. Expecting that the output will be the replaced 
 text.
 
+### Example 1:
+
 Input:
 ```
 - This is a template with one ${variable}
@@ -18,6 +20,8 @@ Output:
 ```
 - This template with one foo
 ```
+
+### Example 2:
 
 Input:
 ```
