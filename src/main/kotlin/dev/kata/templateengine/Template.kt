@@ -13,14 +13,6 @@ class Template(
     }
 
     fun replace(): Template {
-        this.addWarningsBeforeReplacementWhenNecessary(templateText, templateVariables)
-        var replacedText = doReplacement()
-        val template = Template(replacedText, templateVariables, this.warnings)
-        this.addWarningToNonReplacedVariables(template)
-        return template
-    }
-
-    private fun doReplacement(): String {
         val variableNames = templateVariables.keys
         var text = templateText
         var expression: String
@@ -30,10 +22,10 @@ class Template(
             variableValue = templateVariables[name].toString()
             text = text.replace(expression, variableValue)
         }
-        return text
+        return Template(text, templateVariables, warnings)
     }
 
-    private fun addWarningsBeforeReplacementWhenNecessary(
+    fun addWarningsBeforeReplacementWhenNecessary(
         templateText: String,
         templateVariables: Map<String, String>
     ) {
@@ -42,7 +34,7 @@ class Template(
         this.addWarningWhenThereAreVariablesNotPresentInText(templateText, templateVariables)
     }
 
-    private fun addWarningToNonReplacedVariables(template: Template) {
+    fun addWarningToNonReplacedVariables(template: Template) {
         val regex = Regex(pattern = "\\$\\{[^}]*\\}", options = setOf(RegexOption.IGNORE_CASE))
         val nonReplacedVariables = regex
             .findAll(template.text())

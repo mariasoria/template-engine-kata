@@ -9,7 +9,10 @@ class TemplateEngine {
                 return Template.createTemplate(templateText, templateVariables, warnings)
             }
             val template = Template.createTemplate(templateText, templateVariables, warnings)
-            return template.replace()
+            template.addWarningsBeforeReplacementWhenNecessary(templateText, templateVariables)
+            var templateReplaced = template.replace()
+            templateReplaced.addWarningToNonReplacedVariables(templateReplaced)
+            return templateReplaced
         }
 
         private fun validateInputs(text: String, templateVariables: Map<String, String>): MutableList<Warning> {
