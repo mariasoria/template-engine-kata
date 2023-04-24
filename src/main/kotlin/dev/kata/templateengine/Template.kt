@@ -3,12 +3,12 @@ package dev.kata.templateengine
 class Template(
     private var templateText: String,
     private var templateVariables: Map<String, String>,
-    private var warnings: Warnings
+    private var warnings: MutableList<Warning> = mutableListOf()
 ) {
 
     companion object {
-        fun createTemplate(text: String, templateVariables: Map<String, String>): Template {
-            return Template(text, templateVariables, Warnings.initWarnings(""))
+        fun createTemplate(text: String, templateVariables: Map<String, String>, warnings: MutableList<Warning>): Template {
+            return Template(text, templateVariables, warnings)
         }
     }
 
@@ -48,19 +48,19 @@ class Template(
             .findAll(template.text())
             .map { variable -> variable.value }.toList()
         for (nonReplacedVariable in nonReplacedVariables) {
-            this.warnings.addWarning("Variable: $nonReplacedVariable could not be replaced")
+            this.warnings.add(Warning("Variable: $nonReplacedVariable could not be replaced"))
         }
     }
 
     private fun addWarningWhenThereAreEmptyVariableNames(templateVariables: Map<String, String>) {
         if (templateVariables.keys.contains("")) {
-            this.warnings.addWarning("There is at least one variable name being an empty string")
+            this.warnings.add(Warning("There is at least one variable name being an empty string"))
         }
     }
 
     private fun addWarningWhenVariablesAreNotWellFormedInText(templateText: String) {
         if (templateText.contains("\${}")) {
-            this.warnings.addWarning("Some variables to be replaced in text might not be well-formed")
+            this.warnings.add(Warning("Some variables to be replaced in text might not be well-formed"))
         }
     }
 
@@ -72,7 +72,7 @@ class Template(
         println(variableNames)
         variableNames.forEach { variable ->
             if (!templateText.contains(variable)) {
-                this.warnings.addWarning("Variable: \${$variable} could not be found in the text")
+            this.warnings.add(Warning("Variable: \${$variable} could not be found in the text"))
             }
         }
     }
@@ -82,10 +82,7 @@ class Template(
     }
 
     fun warnings(): MutableList<String> {
-        return this.warnings.feedback()
+        return this.warnings.map { warning -> warning.message() }.toMutableList()
     }
 
-    fun hasWarnings(): Boolean {
-        return this.warnings.hasWarnings()
-    }
 }

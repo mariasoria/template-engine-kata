@@ -86,6 +86,7 @@ internal class TemplateEngineShould {
 
         var warning = mutableListOf<String>()
         warning.add("Provided text is empty")
+        warning.add("No replacements were made because there were no variables to be replaced")
         assertEquals(warning, template.warnings())
     }
 
