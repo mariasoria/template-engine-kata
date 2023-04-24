@@ -8,21 +8,7 @@ class Template(
 
     companion object {
         fun createTemplate(text: String, templateVariables: Map<String, String>): Template {
-            val warnings = this.initWarnings(text, templateVariables)
-            return Template(text, templateVariables, warnings)
-        }
-
-        private fun initWarnings(text: String, templateVariables: Map<String, String>): Warnings {
-            if (text.isEmpty()) {
-                return Warnings.initWarnings("Provided text is empty")
-            }
-            if (templateVariables.isEmpty()) {
-                return Warnings.initWarnings("Provided variables map is empty")
-            }
-            if (!text.contains("\${")) {
-                return Warnings.initWarnings("No replacements were made because there were no variables to be replaced")
-            }
-            return Warnings.initWarnings("")
+            return Template(text, templateVariables, Warnings.initWarnings(""))
         }
     }
 
