@@ -88,7 +88,7 @@ internal class TemplateEngineShould {
     }
 
     @Test
-    fun `not replace anything when there are no replacements and should give feedback`() {
+    fun `not replace anything when no replacements have been provided and should give feedback`() {
         val originalText = "This is a text with a \${variable} to be replaced. "
         val replacement = emptyMap<String, String>()
         val expectedResult = "This is a text with a \${variable} to be replaced. "
