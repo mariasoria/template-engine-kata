@@ -21,7 +21,7 @@ class Template(private var templateText: String, private var templateVariables: 
                 return template
             }
             if (templateVariables.isEmpty()) {
-                template.addWarning("Provided variables are empty")
+                template.addWarning("Provided variables map is empty")
                 return template
             }
             if (!text.contains("\${")) {
@@ -49,13 +49,17 @@ class Template(private var templateText: String, private var templateVariables: 
             text = text.replace(expression, variableValue)
         }
         val template = Template(text, templateVariables)
-        template.reviewIfThereIsAnyVariableLeft()
+        template.addWarningToNonReplacedVariables()
         return template
     }
 
-    private fun reviewIfThereIsAnyVariableLeft() {
-        if(this.templateText.contains("\${")) {
-            this.addWarning("No replacements were made for some variables")
+    private fun addWarningToNonReplacedVariables() {
+        val regex = Regex(pattern = "\\$\\{[^}]*\\}", options = setOf(RegexOption.IGNORE_CASE))
+        val nonReplacedVariables = regex
+            .findAll(this.templateText)
+            .map { variable -> variable.value }.toList()
+        for (nonReplacedVariable in nonReplacedVariables) {
+            this.addWarning("Variable: $nonReplacedVariable could not be replaced")
         }
     }
 

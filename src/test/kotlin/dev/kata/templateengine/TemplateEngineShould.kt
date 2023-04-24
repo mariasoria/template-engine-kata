@@ -22,7 +22,7 @@ internal class TemplateEngineShould {
         assertEquals(expectedResult, template.text())
 
         var warning = mutableListOf<String>()
-        warning.add("No replacements were made for some variables")
+        warning.add("Variable: \${another-variable} could not be replaced")
         assertEquals(warning, template.feedback())
     }
 
@@ -50,7 +50,7 @@ internal class TemplateEngineShould {
         assertEquals(expectedResult, template.text())
 
         var warning = mutableListOf<String>()
-        warning.add("No replacements were made for some variables")
+        warning.add("Variable: \${variable} could not be replaced")
         assertEquals(warning, template.feedback())
     }
 
@@ -97,7 +97,7 @@ internal class TemplateEngineShould {
         assertEquals(expectedResult, template.text())
 
         var warning = mutableListOf<String>()
-        warning.add("Provided variables are empty")
+        warning.add("Provided variables map is empty")
         assertEquals(warning, template.feedback())
     }
 
