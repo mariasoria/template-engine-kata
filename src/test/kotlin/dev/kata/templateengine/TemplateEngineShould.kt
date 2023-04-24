@@ -23,7 +23,7 @@ internal class TemplateEngineShould {
 
         var warning = mutableListOf<String>()
         warning.add("Variable: \${another-variable} could not be replaced")
-        assertEquals(warning, template.feedback())
+        assertEquals(warning, template.warnings())
     }
 
     @Test
@@ -37,21 +37,23 @@ internal class TemplateEngineShould {
 
         var warning = mutableListOf<String>()
         warning.add("No replacements were made because there were no variables to be replaced")
-        assertEquals(warning, template.feedback())
+        assertEquals(warning, template.warnings())
     }
 
     @Test
-    fun `not replace anything when the replacement is not present in the text and should give feedback`() {
+    fun `give feedback when a given variable has not been found in the text`() {
         val originalText = "This is a text with a \${variable} to be replaced"
-        val replacement = mapOf("non-existing-variable" to "irrelevant")
-        val expectedResult = "This is a text with a \${variable} to be replaced"
-
+        val replacement = mapOf(
+            "variable" to "value",
+            "non-existing-variable" to "irrelevant"
+        )
+        val expectedResult = "This is a text with a value to be replaced"
         val template = TemplateEngine.replace(originalText, replacement)
         assertEquals(expectedResult, template.text())
 
         var warning = mutableListOf<String>()
-        warning.add("Variable: \${variable} could not be replaced")
-        assertEquals(warning, template.feedback())
+        warning.add("Variable: \${non-existing-variable} could not be found in the text")
+        assertEquals(warning, template.warnings())
     }
 
     @Test
@@ -84,7 +86,7 @@ internal class TemplateEngineShould {
 
         var warning = mutableListOf<String>()
         warning.add("Provided text is empty")
-        assertEquals(warning, template.feedback())
+        assertEquals(warning, template.warnings())
     }
 
     @Test
@@ -98,7 +100,7 @@ internal class TemplateEngineShould {
 
         var warning = mutableListOf<String>()
         warning.add("Provided variables map is empty")
-        assertEquals(warning, template.feedback())
+        assertEquals(warning, template.warnings())
     }
 
     @Test
@@ -111,8 +113,9 @@ internal class TemplateEngineShould {
         assertEquals(expectedResult, template.text())
 
         var warning = mutableListOf<String>()
-        warning.add("Variable name is an empty string")
-        assertEquals(warning, template.feedback())
+        warning.add("There is at least one variable name being an empty string")
+        warning.add("Variable: \${variable} could not be replaced")
+        assertEquals(warning, template.warnings())
     }
 
     @Test
@@ -125,8 +128,10 @@ internal class TemplateEngineShould {
         assertEquals(expectedResult, template.text())
 
         var warning = mutableListOf<String>()
-        warning.add("Variables to be replaced in text might not be well-formed")
-        assertEquals(warning, template.feedback())
+        warning.add("Some variables to be replaced in text might not be well-formed")
+        warning.add("Variable: \${variable} could not be found in the text")
+        warning.add("Variable: \${} could not be replaced")
+        assertEquals(warning, template.warnings())
     }
 
 }
